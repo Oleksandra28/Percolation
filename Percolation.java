@@ -40,13 +40,11 @@ public class Percolation {
 	   // virtual top connections
 	   for (int i = 1; i < N; ++i)
 	   {
-		   System.out.println("virtualTop " + virtualTop + " i "+ i);
 		   uf.union(virtualTop, i);
 	   }
 	   // virtual bottom connections
 	   for (int i = virtualBottom - N + 1; i < virtualBottom; ++i)
 	   {
-		   System.out.println("virtualBottom " + virtualBottom + " i "  + i);
 		   uf.union(virtualBottom, i);
 	   } 
 	   
@@ -119,35 +117,5 @@ public class Percolation {
 
    public static void main(String[] args)   // test client (optional)
    {
-//	   Percolation percolation = new Percolation(4);
-	   
-//	   System.out.println(percolation.isOpen(1, 1));
-//	   System.out.println(percolation.isFull(1, 1));
-//	   System.out.println(percolation.isOpen(2, 1));
-//	   System.out.println(percolation.isFull(2, 1));
-//	   System.out.println(percolation.percolates());
-//	   percolation.open(4,1);
-//	   percolation.open(2,2);
-//	   percolation.open(4,2);
-//	   percolation.open(2,1);
-//	  
-//	   percolation.open(1,1);
-//	   percolation.open(3,2);
-//	   System.out.println(percolation.percolates());
-//	   percolation.print();
-	   
-	   Percolation percolation = new Percolation(2);
-	   System.out.println(percolation.isOpen(1, 1));
-	   System.out.println(percolation.isFull(1, 1));
-	   System.out.println(percolation.isOpen(2, 1));
-	   System.out.println(percolation.isFull(2, 1));
-	   System.out.println(percolation.percolates());
-	   percolation.open(2,1);
-	  
-	   percolation.open(1,1);
-	
-	   System.out.println(percolation.percolates());
-	   percolation.print();
-	   
    }
 }

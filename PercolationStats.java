@@ -26,10 +26,30 @@ public class PercolationStats {
 			//single experiment
 			perc = new Percolation(N);
 			int openSites = 0;
+			int[] openClosed = new int[N+1];
+			
+			int kk = 0;
 			while(!perc.percolates())
-			{				
-				int k = StdRandom.uniform(N-i) + 1;
-				int j = StdRandom.uniform(N-i) + 1;
+			{
+				int k = 0;
+				int j = 0;
+				if (kk < N)
+				{
+				k = StdRandom.uniform(N-kk) + 1;
+				openClosed[k] = N-kk-1;
+				openClosed[N-i-1] = k;
+				
+				j = StdRandom.uniform(N-kk-1) + 1;
+				openClosed[j] = N-kk-2;
+				openClosed[N-kk-2] = j;	
+				kk +=2;
+				}
+				else
+				{
+					k = StdRandom.uniform(N) + 1;
+					j = StdRandom.uniform(N) + 1;
+				}
+				
 				System.out.println(k);
 				System.out.println(j);
 				if (!perc.isOpen(k, j))
@@ -51,7 +71,10 @@ public class PercolationStats {
 			sum += Math.pow(os[i] - mean, 2);
 		}
 		double stdDevSq = sum/(T-1);
-		stdDev = Math.pow(stdDevSq, 0.5);		
+		stdDev = Math.pow(stdDevSq, 0.5);	
+		double weirdThing = (1.96*stdDev)/Math.pow(T, 0.5);
+		confLow = mean - weirdThing;
+		confHigh = mean + weirdThing;
    }//ctor
    public double mean()                      // sample mean of percolation threshold
    {
@@ -72,27 +95,15 @@ public class PercolationStats {
 
    public static void main(String[] args)    // test client (described below)
    {
-//	   StdOut.println(" Hello");
-//    int N = StdIn.readInt();
-//    WeightedQuickUnionUF uf = new WeightedQuickUnionUF(N);
-//    while (!StdIn.isEmpty()) {
-//        int p = StdIn.readInt();
-//        int q = StdIn.readInt();
-//        if (uf.connected(p, q)) continue;
-//        uf.union(p, q);
-//        StdOut.println(p + " " + q);
-//    }
-//    StdOut.println(uf.count() + " components");
-	   int T = 3;
-	   int N = 4;
-	   
-	   PercolationStats p = new PercolationStats(T, N);
+	   int T = StdIn.readInt();
+	   int N = StdIn.readInt();
+
+	   PercolationStats p = new PercolationStats(N, T);
 	   
 	   StdOut.print("mean = "); StdOut.println(p.mean());
 	   StdOut.print("stddev = "); StdOut.println(p.stddev());
 	   StdOut.print("95% confidence interval = "); StdOut.println(p.confidenceLo()+", "+ p.confidenceHi());
-   
-	   
+   	   
    }//main
 
 }
