@@ -75,7 +75,6 @@ public class Percolation {
 		   if (isOpen(i, topY))
 		   {
 			   uf.union(getIndex(i, topY), getIndex(i, j));
-			   //open(i, topY); 
 		   }
 	   }
 	   if (bottomY > 0 && bottomY < N)
@@ -83,7 +82,6 @@ public class Percolation {
 		   if (isOpen(i, bottomY))
 		   {
 			   uf.union(getIndex(i, j), getIndex(i, bottomY));
-			   //open(i, bottomY); // maybe just grid[][] = 1 ??
 		   }
 	   }
 	   if (leftX > 0 && leftX < N)
@@ -91,7 +89,6 @@ public class Percolation {
 		   if (isOpen(leftX, j))
 		   {
 			   uf.union(getIndex(i, j), getIndex(leftX, j));
-			   //open(leftX, j); 
 		   }
 	   }
 	   if (rightX > 0 && rightX < N)
@@ -99,7 +96,6 @@ public class Percolation {
 		   if (isOpen(rightX, j))
 		   {
 			   uf.union(getIndex(i, j), getIndex(rightX, j));
-			   //open(rightX, j); 
 		   }
 	   }
    }//open()
@@ -123,12 +119,33 @@ public class Percolation {
 
    public static void main(String[] args)   // test client (optional)
    {
+//	   Percolation percolation = new Percolation(4);
+	   
+//	   System.out.println(percolation.isOpen(1, 1));
+//	   System.out.println(percolation.isFull(1, 1));
+//	   System.out.println(percolation.isOpen(2, 1));
+//	   System.out.println(percolation.isFull(2, 1));
+//	   System.out.println(percolation.percolates());
+//	   percolation.open(4,1);
+//	   percolation.open(2,2);
+//	   percolation.open(4,2);
+//	   percolation.open(2,1);
+//	  
+//	   percolation.open(1,1);
+//	   percolation.open(3,2);
+//	   System.out.println(percolation.percolates());
+//	   percolation.print();
+	   
 	   Percolation percolation = new Percolation(2);
-	   percolation.open(1,1);
 	   System.out.println(percolation.isOpen(1, 1));
 	   System.out.println(percolation.isFull(1, 1));
 	   System.out.println(percolation.isOpen(2, 1));
 	   System.out.println(percolation.isFull(2, 1));
+	   System.out.println(percolation.percolates());
+	   percolation.open(2,1);
+	  
+	   percolation.open(1,1);
+	
 	   System.out.println(percolation.percolates());
 	   percolation.print();
 	   
