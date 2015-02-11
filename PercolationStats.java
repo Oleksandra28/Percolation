@@ -1,9 +1,5 @@
 public class PercolationStats {
 	
-	private Percolation perc;
-	
-	private int T;
-	
 	private double mean;
 	private double stdDev;
 	private double confLow;
@@ -16,7 +12,6 @@ public class PercolationStats {
 			throw new IllegalArgumentException();
 		}
 		T = t;
-		perc = new Percolation(N);
 		
 		int totalOpenSites = 0;
 		int[] os = new int[T];
@@ -24,7 +19,7 @@ public class PercolationStats {
 		for (int i = 0; i < T; i++)
 		{
 			//single experiment
-			perc = new Percolation(N);
+			Percolation perc = new Percolation(N);
 			int openSites = 0;
 			int[] openClosed = new int[N+1];
 			
@@ -33,7 +28,7 @@ public class PercolationStats {
 			{
 				int k = 0;
 				int j = 0;
-				if (kk < N)
+				if (kk < N && kk > 2)
 				{
 				k = StdRandom.uniform(N-kk) + 1;
 				openClosed[k] = N-kk-1;
@@ -50,8 +45,6 @@ public class PercolationStats {
 					j = StdRandom.uniform(N) + 1;
 				}
 				
-				System.out.println(k);
-				System.out.println(j);
 				if (!perc.isOpen(k, j))
 				{
 					perc.open(k, j);
@@ -95,8 +88,8 @@ public class PercolationStats {
 
    public static void main(String[] args)    // test client (described below)
    {
-	   int T = StdIn.readInt();
-	   int N = StdIn.readInt();
+	   int T = 40;//StdIn.readInt();
+	   int N = 1000;//StdIn.readInt();
 
 	   PercolationStats p = new PercolationStats(N, T);
 	   

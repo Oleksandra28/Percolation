@@ -6,6 +6,8 @@ public class Percolation {
 	private WeightedQuickUnionUF uf;
 	private int virtualTop;
 	private int virtualBottom;
+	private boolean virtualTopIsOpen;
+	private boolean virtualBottomIsOpen;
 	private int N; // inclusive N
 	
 	private void validate(int n)
@@ -23,10 +25,6 @@ public class Percolation {
 		return index;
 	}
 	
-	public void print()
-	{
-		uf.print();
-	}
 	public Percolation(int n)               // create N-by-N grid, with all sites blocked
 	{
 	   if (n <= 0)
@@ -56,6 +54,9 @@ public class Percolation {
 			   grid[i][j] = 0; // 0 -blocked
 		   }
 	   }	   	   
+	   
+	   virtualTopIsOpen = false;
+	   virtualBottomIsOpen = false;
    }// Percolation ctor
    public void open(int i, int j)          // open site (row i, column j) if it is not open already
    {
@@ -63,6 +64,16 @@ public class Percolation {
 	   validate(j);
 	   grid[i][j] = 1;
 	   
+	   //possibly, connect virtualTop
+	   if (i == 1)
+	   {
+		   virtualTopIsOpen = true;
+	   }
+	   if (i == N-1)
+	   {
+		   virtualBottomIsOpen = true;
+	   }
+
 	   int topY = j - 1;
 	   int bottomY = j + 1;
 	   int leftX = i - 1;
@@ -112,7 +123,7 @@ public class Percolation {
    }
    public boolean percolates()             // does the system percolate?
    {
-	   return uf.connected(virtualTop, virtualBottom);
+	   return uf.connected(virtualTop, virtualBottom) && virtualTopIsOpen && virtualBottomIsOpen;
    }
 
    public static void main(String[] args)   // test client (optional)
