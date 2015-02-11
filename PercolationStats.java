@@ -5,24 +5,29 @@ public class PercolationStats {
 	private double confLow;
 	private double confHigh;
 	
-	public PercolationStats(int N, int t)     // perform T independent experiments on an N-by-N grid
+	public PercolationStats(int N, int T)     // perform T independent experiments on an N-by-N grid
    {
-		if (N <= 0 || t <= 0)
+		if (N <= 0 || T <= 0)
 		{
 			throw new IllegalArgumentException();
-		}
-		T = t;
+		}		
 		
-		int totalOpenSites = 0;
-		int[] os = new int[T];
+		mean = 0;
+		stdDev = 0;
+		confLow = 0;
+		confHigh = 0;
+		
+		double openSitesSum = 0;
+		double[] openSitesExperiment = new double[T];
 		//perform experiments
 		for (int i = 0; i < T; i++)
 		{
 			//single experiment
 			Percolation perc = new Percolation(N);
+			//count openSites in a single experiment
 			int openSites = 0;
-			int[] openClosed = new int[N+1];
-			
+			//maintain openClosed array to randomize better
+			int[] openClosed = new int[N+1];			
 			int kk = 0;
 			while(!perc.percolates())
 			{
@@ -30,42 +35,43 @@ public class PercolationStats {
 				int j = 0;
 				if (kk < N && kk > 2)
 				{
-				k = StdRandom.uniform(N-kk) + 1;
-				openClosed[k] = N-kk-1;
-				openClosed[N-i-1] = k;
-				
-				j = StdRandom.uniform(N-kk-1) + 1;
-				openClosed[j] = N-kk-2;
-				openClosed[N-kk-2] = j;	
-				kk +=2;
+					k = StdRandom.uniform(N-kk) + 1;
+					openClosed[k] = N-kk-1;
+					openClosed[N-i-1] = k;
+					
+					j = StdRandom.uniform(N-kk-1) + 1;
+					openClosed[j] = N-kk-2;
+					openClosed[N-kk-2] = j;	
+					kk +=2;
 				}
 				else
 				{
 					k = StdRandom.uniform(N) + 1;
 					j = StdRandom.uniform(N) + 1;
-				}
-				
+				}				
 				if (!perc.isOpen(k, j))
 				{
 					perc.open(k, j);
 					openSites += 1;
-				}
-				os[i] = openSites;
-				totalOpenSites += openSites;
-			}
+				}				
+			}//while loop
 			
+			openSitesExperiment[i] = (double)openSites/(N*N);
+			openSitesSum += openSitesExperiment[i];
 		}// end experiments
-		mean = totalOpenSites/T;
+		
+		//we need a FRACTION!! so T*N*N instead of T 
+		mean = openSitesSum/T;
 		
 		// std dev
 		double sum = 0;
 		for (int i = 0; i < T; i++)
 		{
-			sum += Math.pow(os[i] - mean, 2);
+			sum += Math.pow(openSitesExperiment[i] - mean, 2);
 		}
 		double stdDevSq = sum/(T-1);
 		stdDev = Math.pow(stdDevSq, 0.5);	
-		double weirdThing = (1.96*stdDev)/Math.pow(T, 0.5);
+		double weirdThing = (1.96*stdDev)/Math.sqrt(T);
 		confLow = mean - weirdThing;
 		confHigh = mean + weirdThing;
    }//ctor
@@ -88,8 +94,8 @@ public class PercolationStats {
 
    public static void main(String[] args)    // test client (described below)
    {
-	   int T = 40;//StdIn.readInt();
-	   int N = 1000;//StdIn.readInt();
+	   int N = StdIn.readInt();
+	   int T = StdIn.readInt();	   
 
 	   PercolationStats p = new PercolationStats(N, T);
 	   
